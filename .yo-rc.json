@@ -1,0 +1,38 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.carpooling"
+    },
+    "jhipsterVersion": "6.4.1",
+    "applicationType": "monolith",
+    "baseName": "carpooling",
+    "packageName": "com.carpooling",
+    "packageFolder": "com/carpooling",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "YTcwMjQ5MDg4NzFjNTNlZTMzOGZlY2Q4NTViYWMyOTYyOGY4MGNlYjJjNDNiZDAzNjNjOGZmZTgyMzQ2MmViZGQyNDEzMmUwNWIwNDkxMjViNTI0YjEwMzk2NDU3NTU2YWVjZGZkYTQ5YzQ5Y2M5MWY0M2QyNDBjOGVkYzE3MTQ=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "blueprints": []
+  }
+}
