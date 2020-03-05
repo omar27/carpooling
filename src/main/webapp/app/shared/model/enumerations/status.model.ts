@@ -1,0 +1,7 @@
+export const enum Status {
+  SCHEDULED = 'SCHEDULED',
+  BOOKED = 'BOOKED',
+  STARTED = 'STARTED',
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED'
+}

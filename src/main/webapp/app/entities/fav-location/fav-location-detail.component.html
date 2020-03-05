@@ -1,0 +1,35 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="favLocation">
+            <h2><span>Fav Location</span> {{favLocation.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>User</span></dt>
+                <dd>
+                    <div *ngIf="favLocation.userId">
+                        <a [routerLink]="['/car-pooling-user', favLocation.userId, 'view']">{{favLocation.userFirstName}}</a>
+                    </div>
+                </dd>
+                <dt><span>Destination</span></dt>
+                <dd>
+                    <div *ngIf="favLocation.destinationId">
+                        <a [routerLink]="['/location', favLocation.destinationId, 'view']">{{favLocation.destinationCity}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/fav-location', favLocation.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

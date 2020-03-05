@@ -1,0 +1,84 @@
+<div>
+    <h2 id="page-heading">
+        <span>Rides</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-ride" [routerLink]="['/ride/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create a new Ride
+            </span>
+        </button>
+    </h2>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="rides?.length === 0">
+        <span>No rides found</span>
+    </div>
+    <div class="table-responsive" *ngIf="rides?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="date"><span>Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="status"><span>Status</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="driverFirstName"><span>Driver</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="passengerFirstName"><span>Passenger</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="sourceCity"><span>Source</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="destinationCity"><span>Destination</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let ride of rides ;trackBy: trackId">
+                <td><a [routerLink]="['/ride', ride.id, 'view' ]">{{ride.id}}</a></td>
+                <td>{{ride.date | date:'mediumDate'}}</td>
+                <td>{{ride.status}}</td>
+                <td>
+                    <div *ngIf="ride.driverId">
+                        <a [routerLink]="['/car-pooling-user', ride.driverId , 'view' ]" >{{ride.driverFirstName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="ride.passengerId">
+                        <a [routerLink]="['/car-pooling-user', ride.passengerId , 'view' ]" >{{ride.passengerFirstName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="ride.sourceId">
+                        <a [routerLink]="['/location', ride.sourceId , 'view' ]" >{{ride.sourceCity}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="ride.destinationId">
+                        <a [routerLink]="['/location', ride.destinationId , 'view' ]" >{{ride.destinationCity}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/ride', ride.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/ride', ride.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/ride', { outlets: { popup: ride.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
