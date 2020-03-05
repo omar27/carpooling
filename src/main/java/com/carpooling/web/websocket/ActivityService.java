@@ -28,7 +28,7 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
     }
 
     @MessageMapping("/topic/activity")
-    @SendTo("/topic/tracker")
+    @SendTo("/topic/notifications")
     public ActivityDTO sendActivity(@Payload ActivityDTO activityDTO, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
         activityDTO.setUserLogin(principal.getName());
         activityDTO.setSessionId(stompHeaderAccessor.getSessionId());
@@ -43,6 +43,6 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
         ActivityDTO activityDTO = new ActivityDTO();
         activityDTO.setSessionId(event.getSessionId());
         activityDTO.setPage("logout");
-        messagingTemplate.convertAndSend("/topic/tracker", activityDTO);
+        messagingTemplate.convertAndSend("/topic/notifications", activityDTO);
     }
 }

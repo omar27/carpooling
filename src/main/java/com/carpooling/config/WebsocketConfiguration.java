@@ -31,52 +31,15 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
     }
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/websocket")
+            .setAllowedOrigins("*")
+            .withSockJS();
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        String[] allowedOrigins = Optional.ofNullable(jHipsterProperties.getCors().getAllowedOrigins()).map(origins -> origins.toArray(new String[0])).orElse(new String[0]);
-        registry.addEndpoint("/websocket/tracker")
-            .setHandshakeHandler(defaultHandshakeHandler())
-            .setAllowedOrigins(allowedOrigins)
-            .withSockJS()
-            .setInterceptors(httpSessionHandshakeInterceptor());
-    }
-
-    @Bean
-    public HandshakeInterceptor httpSessionHandshakeInterceptor() {
-        return new HandshakeInterceptor() {
-
-            @Override
-            public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-                if (request instanceof ServletServerHttpRequest) {
-                    ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
-                    attributes.put(IP_ADDRESS, servletRequest.getRemoteAddress());
-                }
-                return true;
-            }
-
-            @Override
-            public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
-
-            }
-        };
-    }
-
-    private DefaultHandshakeHandler defaultHandshakeHandler() {
-        return new DefaultHandshakeHandler() {
-            @Override
-            protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
-                Principal principal = request.getPrincipal();
-                if (principal == null) {
-                    Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
-                    principal = new AnonymousAuthenticationToken("WebsocketConfiguration", "anonymous", authorities);
-                }
-                return principal;
-            }
-        };
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic");
+        config.setApplicationDestinationPrefixes("/app");
     }
 }

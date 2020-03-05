@@ -88,6 +88,7 @@ export class JhiTrackerService {
   subscribe() {
     this.connection.then(() => {
       this.subscriber = this.stompClient.subscribe('/topic/tracker', data => {
+        // console.log("RECIEVED_____________________________", data);
         this.listenerObserver.next(JSON.parse(data.body));
       });
     });

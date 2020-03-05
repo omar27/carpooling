@@ -6,6 +6,7 @@ import { shareReplay, tap } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
 import { JhiTrackerService } from '../tracker/tracker.service';
+import { Websockets } from '../sockets/websockets.service';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -14,7 +15,7 @@ export class AccountService {
   private authenticationState = new Subject<any>();
   private accountCache$: Observable<Account>;
 
-  constructor(private http: HttpClient, private trackerService: JhiTrackerService) {}
+  constructor(private http: HttpClient, private trackerService: JhiTrackerService, private socketService: Websockets) {}
 
   fetch(): Observable<Account> {
     return this.http.get<Account>(SERVER_API_URL + 'api/account');
@@ -54,7 +55,8 @@ export class AccountService {
             if (account) {
               this.userIdentity = account;
               this.authenticated = true;
-              this.trackerService.connect();
+              //  this.trackerService.connect();
+              this.socketService.listenSocket();
             } else {
               this.userIdentity = null;
               this.authenticated = false;
@@ -62,8 +64,9 @@ export class AccountService {
             this.authenticationState.next(this.userIdentity);
           },
           () => {
-            if (this.trackerService.stompClient && this.trackerService.stompClient.connected) {
+            if (this.socketService.stompClient && this.socketService.stompClient.connected) {
               this.trackerService.disconnect();
+              //this.socketService.disconnect();
             }
             this.userIdentity = null;
             this.authenticated = false;

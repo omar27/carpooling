@@ -6,8 +6,6 @@ import { CarpoolingTestModule } from '../../../test.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { SettingsComponent } from 'app/account/settings/settings.component';
-import { JhiTrackerService } from 'app/core/tracker/tracker.service';
-import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 
 describe('Component Tests', () => {
   describe('SettingsComponent', () => {
@@ -19,13 +17,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [CarpoolingTestModule],
         declarations: [SettingsComponent],
-        providers: [
-          FormBuilder,
-          {
-            provide: JhiTrackerService,
-            useClass: MockTrackerService
-          }
-        ]
+        providers: [FormBuilder]
       })
         .overrideTemplate(SettingsComponent, '')
         .compileComponents();

@@ -34,6 +34,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authSubscription = this.eventManager.subscribe('authenticationSuccess', message => {
       this.accountService.identity().subscribe(account => {
         this.account = account;
+        localStorage.setItem('email', this.account.email);
+        localStorage.setItem('firstName', this.account.firstName);
+        localStorage.setItem('lastName', this.account.lastName);
+        localStorage.setItem('authorities', this.account.authorities.join());
       });
     });
   }
