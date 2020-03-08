@@ -1,32 +1,20 @@
 package com.carpooling.service.impl;
 
 import com.carpooling.service.RideService;
-import com.carpooling.domain.CarPoolingUser;
-import com.carpooling.domain.FavLocation;
-import com.carpooling.domain.Location;
 import com.carpooling.domain.Ride;
 import com.carpooling.repository.RideRepository;
-import com.carpooling.security.SecurityUtils;
 import com.carpooling.service.dto.RideDTO;
 import com.carpooling.service.mapper.RideMapper;
 import com.carpooling.web.websocket.ActivityService;
 
-import org.jboss.logging.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**

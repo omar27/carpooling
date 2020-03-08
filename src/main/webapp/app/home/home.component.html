@@ -12,9 +12,9 @@
             </div>
             <div *ngIf="account">
                 Please select Role below <br>
-                <a href="ride/new" class="left-margin"><img width="150" height="150"
+                <a (click)="setUserType('DRIVER')" class="left-margin"><img width="150" height="150"
                         src="../../content/images/car.svg" /></a>
-                <a href="" class="left-margin"> <img width="150" height="150"
+                <a (click)="setUserType('PASSENGER')" class="left-margin"> <img width="150" height="150"
                         src="../../content/images/passenger.svg" /></a>
             </div>
         </div>

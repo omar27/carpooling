@@ -51,9 +51,14 @@ export class RideService {
   }
 
   protected convertDateFromClient(ride: IRide): IRide {
-    const copy: IRide = Object.assign({}, ride, {
-      date: ride.date != null && ride.date.isValid() ? ride.date.format(DATE_FORMAT) : null
-    });
+    let copy: IRide = ride;
+    try {
+      copy = Object.assign({}, ride, {
+        date: ride.date != null && ride.date.isValid() ? ride.date.format(DATE_FORMAT) : null
+      });
+    } catch (e) {
+      console.error(e);
+    }
     return copy;
   }
 
