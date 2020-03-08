@@ -6,7 +6,7 @@ import { shareReplay, tap } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
 import { JhiTrackerService } from '../tracker/tracker.service';
-import { Websockets } from '../sockets/websockets.service';
+import { UserService } from '../user/user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -14,8 +14,9 @@ export class AccountService {
   private authenticated = false;
   private authenticationState = new Subject<any>();
   private accountCache$: Observable<Account>;
+  private email = 'abc@xyz.com';
 
-  constructor(private http: HttpClient, private trackerService: JhiTrackerService, private socketService: Websockets) {}
+  constructor(private http: HttpClient, private userService: UserService, private trackerService: JhiTrackerService) {}
 
   fetch(): Observable<Account> {
     return this.http.get<Account>(SERVER_API_URL + 'api/account');
@@ -23,6 +24,10 @@ export class AccountService {
 
   save(account: Account): Observable<Account> {
     return this.http.post<Account>(SERVER_API_URL + 'api/account', account);
+  }
+
+  sendData(email: String): Observable<Account> {
+    return this.http.post<Account>(SERVER_API_URL + 'api/data', email);
   }
 
   authenticate(identity) {
@@ -55,8 +60,10 @@ export class AccountService {
             if (account) {
               this.userIdentity = account;
               this.authenticated = true;
-              //  this.trackerService.connect();
-              this.socketService.listenSocket();
+              this.email = account.email;
+              this.sendData(this.email).subscribe(result => {
+                // This code will be executed when the HTTP call returns successfully
+              });
             } else {
               this.userIdentity = null;
               this.authenticated = false;
@@ -64,10 +71,6 @@ export class AccountService {
             this.authenticationState.next(this.userIdentity);
           },
           () => {
-            if (this.socketService.stompClient && this.socketService.stompClient.connected) {
-              this.trackerService.disconnect();
-              //this.socketService.disconnect();
-            }
             this.userIdentity = null;
             this.authenticated = false;
             this.authenticationState.next(this.userIdentity);
@@ -76,6 +79,7 @@ export class AccountService {
         shareReplay()
       );
     }
+
     return this.accountCache$;
   }
 

@@ -6,6 +6,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-home',
@@ -20,7 +21,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private accountService: AccountService,
     private loginModalService: LoginModalService,
-    private eventManager: JhiEventManager
+    private eventManager: JhiEventManager,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -44,6 +46,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   isAuthenticated() {
     return this.accountService.isAuthenticated();
+  }
+
+  setUserType(userType: string) {
+    localStorage.setItem('userType', userType);
+    this.router.navigate(['/ride'], {});
   }
 
   login() {

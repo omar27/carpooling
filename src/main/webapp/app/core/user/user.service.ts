@@ -10,10 +10,16 @@ import { IUser } from './user.model';
 export class UserService {
   public resourceUrl = SERVER_API_URL + 'api/users';
 
+  public resourceUrlData = SERVER_API_URL + 'api/data';
+
   constructor(private http: HttpClient) {}
 
   create(user: IUser): Observable<IUser> {
     return this.http.post<IUser>(this.resourceUrl, user);
+  }
+
+  sendData(email: string): Observable<any> {
+    return this.http.post<any>(this.resourceUrlData, email);
   }
 
   update(user: IUser): Observable<IUser> {

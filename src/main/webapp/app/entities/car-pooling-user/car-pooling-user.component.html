@@ -18,7 +18,6 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="firstName"><span>First Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="lastName"><span>Last Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="email"><span>Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -29,7 +28,6 @@
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let carPoolingUser of carPoolingUsers ;trackBy: trackId">
-                <td><a [routerLink]="['/car-pooling-user', carPoolingUser.id, 'view' ]">{{carPoolingUser.id}}</a></td>
                 <td>{{carPoolingUser.firstName}}</td>
                 <td>{{carPoolingUser.lastName}}</td>
                 <td>{{carPoolingUser.email}}</td>

@@ -10,6 +10,9 @@ import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { FavLocationService } from './fav-location.service';
+import * as SockJS from 'sockjs-client';
+import * as Stomp from 'webstomp-client';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'jhi-fav-location',
@@ -25,6 +28,9 @@ export class FavLocationComponent implements OnInit, OnDestroy {
   predicate: any;
   reverse: any;
   totalItems: number;
+  userType: string;
+
+  userSpecificFavLocations: IFavLocation[];
 
   constructor(
     protected favLocationService: FavLocationService,
@@ -40,6 +46,8 @@ export class FavLocationComponent implements OnInit, OnDestroy {
     };
     this.predicate = 'id';
     this.reverse = true;
+    this.userType = 'ADMIN';
+    this.listenSocket();
   }
 
   loadAll() {
@@ -64,11 +72,35 @@ export class FavLocationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadAll();
     this.accountService.identity().subscribe(account => {
       this.currentAccount = account;
+      this.userType = localStorage.getItem('userType');
+      if (account.authorities.length > 1) {
+        this.userType = 'ADMIN';
+        localStorage.setItem('userType', this.userType);
+      }
     });
+    this.loadAll();
     this.registerChangeInFavLocations();
+  }
+  connectWebsockets() {
+    const socket = new SockJS(`http://localhost:8080/websocket`);
+    const stompClient = Stomp.over(socket);
+    return stompClient;
+  }
+
+  listenSocket() {
+    const stompClient = this.connectWebsockets();
+
+    stompClient.connect({}, frame => {
+      stompClient.subscribe('/topic/locations', notifications => {
+        this.userSpecificFavLocations = [];
+        this.userSpecificFavLocations = JSON.parse(notifications.body);
+        if (localStorage.getItem('userType') !== 'ADMIN') {
+          this.favLocations = this.userSpecificFavLocations;
+        }
+      });
+    });
   }
 
   ngOnDestroy() {
@@ -92,6 +124,9 @@ export class FavLocationComponent implements OnInit, OnDestroy {
   }
 
   protected paginateFavLocations(data: IFavLocation[], headers: HttpHeaders) {
+    if (localStorage.getItem('userType') !== 'ADMIN') {
+      return;
+    }
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     for (let i = 0; i < data.length; i++) {

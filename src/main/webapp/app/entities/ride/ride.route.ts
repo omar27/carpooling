@@ -33,7 +33,7 @@ export const rideRoute: Routes = [
     path: '',
     component: RideComponent,
     data: {
-      authorities: ['ROLE_ADMIN'],
+      authorities: ['ROLE_ADMIN', 'ROLE_USER'],
       pageTitle: 'Rides'
     },
     canActivate: [UserRouteAccessService]
